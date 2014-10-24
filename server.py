@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 # -*- coding: iso-8859-15 -*-
 """
@@ -6,7 +7,7 @@ en UDP simple
 """
 
 import SocketServer
-
+import sys
 
 class EchoHandler(SocketServer.DatagramRequestHandler):
     """
@@ -14,17 +15,17 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
     """
 
     def handle(self):
-        # Escribe dirección y puerto del cliente (de tupla client_address)
-        self.wfile.write("Hemos recibido tu peticion")
+        print self.client_address
         while 1:
-            # Leyendo línea a línea lo que nos envía el cliente
             line = self.rfile.read()
-            print "El cliente nos manda " + line
             if not line:
                 break
+        self.wfile.write("Hemos recibido tu peticion")
+        print "El cliente nos manda " + line
 
 if __name__ == "__main__":
+    LISTEN_PORT = int(sys.argv[1])
     # Creamos servidor de eco y escuchamos
-    serv = SocketServer.UDPServer(("", 6001), EchoHandler)
+    serv = SocketServer.UDPServer(("", LISTEN_PORT ), EchoHandler)
     print "Lanzando servidor UDP de eco..."
     serv.serve_forever()
