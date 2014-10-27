@@ -28,7 +28,7 @@ my_socket.connect((SERVER, PORT))
 
 print "Enviando: " + METHOD.upper() + " sip:" + LINE + " SIP/2.0\r\n\r\n"
 print "Enviando: " + str(EXPIRES)
-my_socket.send( METHOD.upper() + " sip:" + LINE + " SIP/2.0\r\n" + "Expires: " 
+my_socket.send(METHOD.upper() + " sip:" + LINE + " SIP/2.0\r\n" + "Expires: "
                 + str(EXPIRES))
 data = my_socket.recv(1024)
 
