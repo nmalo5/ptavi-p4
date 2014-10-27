@@ -17,8 +17,8 @@ PORT = int(sys.argv[2])
 con = 3
 linea = ""
 while con < len(sys.argv):
-   linea = linea + sys.argv[con] + " "
-   con = con + 1
+    linea = linea + sys.argv[con] + " "
+    con = con + 1
 
 LINE = linea
 
