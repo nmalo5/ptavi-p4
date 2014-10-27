@@ -15,11 +15,9 @@ try:
     # Contenido que vamos a enviar
     METHOD = sys.argv[3]
     LINE = sys.argv[4]
+    EXPIRES = int(sys.argv[5])
 except IndexError:
     sys.exit("Usage: client.py ip puerto register sip_address expires_value")
-
-try:
-    EXPIRES = int(sys.argv[5])
 except ValueError:
     sys.exit("Usage: client.py ip puerto register sip_address expires_value")
 
