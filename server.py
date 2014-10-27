@@ -1,5 +1,3 @@
-
-
 #!/usr/bin/python
 # -*- coding: iso-8859-15 -*-
 """
@@ -23,7 +21,9 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             line = self.rfile.read()
             line_partida = line.split(":")
             Method = line_partida[0].split(" ")[0]
+            """Si tenemos Register, procedemos a rellenar nuestro Registro"""
             if Method == "REGISTER":
+                """Primero comprobamos los tiempos de expiracion"""
                 for Client in Registro.keys():
                     #Vamos comparando con el tiempo de cada clave-valor
                     Tiempo = Registro[Client][1]
@@ -36,6 +36,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 Valores = [self.client_address[0], Time]
                 Registro[Clave] = Valores
                 print "REGISTRO " + str(Registro)
+                """ Si entramos con un valor a 0, somos borrados"""
                 if int(Expires) == 0:
                     del Registro[Clave]
                     print "REGISTRO " + str(Registro)
@@ -45,12 +46,13 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 break
 
     def register2file(self):
+        """ Método que escribirá en nuestro fichero"""
         fichero = open('registered.txt', 'w')
         fichero.write("User\tIP\tExpires\n")
         for Client in Registro:
             IP = Registro[Client][0]
-            Time = time.strftime('%Y-%m-%d %H:%M:%S',
-                   time.gmtime(Registro[Client][1]))
+            Tiempo = time.gmtime(Registro[Client][1])
+            Time = time.strftime('%Y-%m-%d %H:%M:%S', Tiempo)
             fichero.write(Client + '\t' + IP + '\t' + Time + '\n')
         fichero.close()
 
