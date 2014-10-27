@@ -22,11 +22,18 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             Method = line_partida[0].split(" ")[0]
             if Method == "REGISTER": 
                 Clave = line_partida[1].split(" ")[0]
-                Registro[Clave] = self.client_address[0]
+                Expires = line_partida[2].split(" ")[1]
+                Valores = [self.client_address[0], Expires] 
+                Registro[Clave] = Valores
+                print "REGISTRO " + str(Registro)
+                if int(Expires) == 0:
+                    del Registro[Clave]
+                    print "REGISTRO " + str(Registro)
+                self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
             if not line:
-                break
-        self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
-        print "REGISTRO " + str(Registro)
+                break    
+        
+   
 
 if __name__ == "__main__":
     LISTEN_PORT = int(sys.argv[1])
