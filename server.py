@@ -6,7 +6,9 @@ en UDP simple
 """
 
 import SocketServer
+import sys
 
+PORT = int(sys.argv[1])
 
 class EchoHandler(SocketServer.DatagramRequestHandler):
     """
@@ -20,11 +22,13 @@ class EchoHandler(SocketServer.DatagramRequestHandler):
             # Leyendo línea a línea lo que nos envía el cliente
             line = self.rfile.read()
             print "El cliente nos manda " + line
+            print "IP Cliente: " + self.client_address[0]
+            print "IP Puerto: " + str(self.client_address[1]) + "\n"
             if not line:
                 break
 
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
-    serv = SocketServer.UDPServer(("", 6001), EchoHandler)
+    serv = SocketServer.UDPServer(("", PORT), EchoHandler)
     print "Lanzando servidor UDP de eco..."
     serv.serve_forever()
