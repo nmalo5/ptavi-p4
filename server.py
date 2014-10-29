@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: iso-8859-15 -*-
 """
-Clase (y programa principal) para un servidor de eco
-en UDP simple
+Clase (y programa principal) para un servidor de registro SIP
 """
 
 import SocketServer
@@ -14,7 +13,7 @@ comandos = sys.argv
 
 class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
     """
-    Echo server class
+    Register server class
     """
 
     diccionario = {}
@@ -51,11 +50,9 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 for usuario in self.diccionario.keys():
                     if self.diccionario[usuario][1] < tiempo_actual:
                         del self.diccionario[usuario]
-                    self.wfile.write("SIP/2.0 200 OK\r\n\r\n")
                 print "SIP/2.0 200 OK\r\n\r\n"
             else:
                 print "SIP/2.0 400 Bad Request\r\n\r\n"
-                self.wfile.write("SIP/2.0 400 Bad Request\r\n\r\n")
             self.register2file()
             if not line:
                 break
@@ -66,5 +63,5 @@ if __name__ == "__main__":
     Procedimiento principal
     """
     serv = SocketServer.UDPServer(("", int(comandos[1])), SIPRegisterHandler)
-    print "Lanzando servidor UDP de eco..."
+    print "Lanzando servidor de registro SIP..."
     serv.serve_forever()
