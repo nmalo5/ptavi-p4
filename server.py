@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: iso-8859-15 -*-
 """
-Clase (y programa principal) para un servidor de eco
-en UDP simple
+Clase (y programa principal) para un servidor register SIP
 """
 
 import SocketServer
@@ -12,7 +11,7 @@ import time
 
 class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
     """
-    Echo server class
+    Register server class
     """
 
     def handle(self):
@@ -21,9 +20,9 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             line = self.rfile.read()
             line_partida = line.split(":")
             Method = line_partida[0].split(" ")[0]
-            """Si tenemos Register, procedemos a rellenar nuestro Registro"""
+            #Si tenemos Register, procedemos a rellenar nuestro Registro
             if Method == "REGISTER":
-                """Primero comprobamos los tiempos de expiracion"""
+                #Primero comprobamos los tiempos de expiracion
                 for Client in Registro.keys():
                     #Vamos comparando con el tiempo de cada clave-valor
                     Tiempo = Registro[Client][1]
@@ -36,7 +35,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 Valores = [self.client_address[0], Time]
                 Registro[Clave] = Valores
                 print "REGISTRO " + str(Registro)
-                """ Si entramos con un valor a 0, somos borrados"""
+                # Si entramos con un valor a 0, somos borrados
                 if int(Expires) == 0:
                     del Registro[Clave]
                     print "REGISTRO " + str(Registro)
@@ -59,7 +58,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
 if __name__ == "__main__":
     LISTEN_PORT = int(sys.argv[1])
     Registro = {}
-    # Creamos servidor de eco y escuchamos
+    # Creamos servidor SIP y escuchamos
     serv = SocketServer.UDPServer(("", LISTEN_PORT), SIPRegisterHandler)
-    print "Lanzando servidor UDP de eco..."
+    print "Lanzando servidor register SIP..."
     serv.serve_forever()
